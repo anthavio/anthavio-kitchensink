@@ -20,27 +20,27 @@ import javax.sql.DataSource;
 public class GenericThrows {
 
 	public static void main(String[] args) {
-		StrategyFramework framework = new StrategyFramework();
+		StrategyContext context = new StrategyContext();
 
 		ReaderLoader readerLoader = new ReaderLoader(new StringReader("Blah! Blah! Blah!"));
 		try {
-			framework.perform(readerLoader);
+			context.perform(readerLoader);
 		} catch (IOException iox) {
-			//ReaderLoader thrown IOException is propagated through StrategyFramework and delivered here
-		} catch (FrameworkException fx) {
-			//StrategyFramework thrown exception wrapper - All sorts of non ReaderLoader originated Exceptions
+			//ReaderLoader thrown IOException is propagated through StrategyContext and delivered here
+		} catch (ContextException cx) {
+			//StrategyContext thrown exception wrapper - All sorts of non ReaderLoader originated Exceptions
 		}
 
 		DataSource dataSource = null; //get it from somewhere
 		JdbcLoader jdbcLoader = new JdbcLoader(dataSource, "SELECT something FROM somewhere WHERE column = ?");
 		try {
-			framework.perform(jdbcLoader);
+			context.perform(jdbcLoader);
 		} catch (InvalidRecordCountException ircx) {
-			//JdbcLoader thrown InvalidRecordCountException is propagated through StrategyFramework and delivered here
-			long badRecordId = ircx.getRecordId();
-		} catch (FrameworkException fx) {
-			//StrategyFramework thrown exception wrapper - SQLException will be cause propably...
-			Throwable cause = fx.getCause();
+			//JdbcLoader thrown InvalidRecordCountException is propagated through StrategyContext and delivered here
+			long badRecordId = ircx.getRecordId(); //we can take some action when knowing failing record id
+		} catch (ContextException cx) {
+			//StrategyContext thrown exception wrapper - SQLException will be cause propably...
+			Throwable cause = cx.getCause();
 		}
 
 	}
@@ -48,7 +48,7 @@ public class GenericThrows {
 }
 
 /**
- * Framework Strategy interface - To be implemented by client
+ * Strategy interface - To be implemented by client
  */
 interface LoaderStrategy<X extends Exception> {
 
@@ -77,20 +77,20 @@ interface NastyLoaderStrategy extends LoaderStrategy<Exception> {
 }
 
 /**
- * Framework exception wrapper - delivers other then LoaderStrategy exceptions to client 
+ * Context exception wrapper - delivers other then LoaderStrategy exceptions to client 
  */
-class FrameworkException extends RuntimeException {
+class ContextException extends RuntimeException {
 
-	public FrameworkException(String string, Exception cause) {
+	public ContextException(String string, Exception cause) {
 		super(string, cause);
 	}
 
 }
 
 /**
- * Framework using LoaderStrategy, passing selected exceptions (X)
+ * Context using LoaderStrategy, passing selected exceptions (X)
  */
-class StrategyFramework {
+class StrategyContext {
 
 	public <X extends Exception> void perform(LoaderStrategy<X> loader) throws X {
 
@@ -101,8 +101,8 @@ class StrategyFramework {
 		try {
 			sendDataToRemoteSystem(data);
 		} catch (RemoteException rx) {
-			//Other checked Exception must be wrapped inside FrameworkException 
-			throw new FrameworkException("Failed to send data for resourceId " + resourceId, rx);
+			//Other checked Exception must be wrapped inside ContextException 
+			throw new ContextException("Failed to send data for resourceId " + resourceId, rx);
 		}
 	}
 
