@@ -1,4 +1,4 @@
-package com.anthavio.sink;
+package net.anthavio.sink;
 
 import java.io.BufferedReader;
 import java.io.IOException;
