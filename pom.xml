@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>net.anthavio.maven</groupId>
 		<artifactId>anthavio-super-pom</artifactId>
-		<version>1</version>
+		<version>3</version>
 	</parent>
 	
 	<groupId>net.anthavio</groupId>
@@ -14,9 +14,8 @@
 	<packaging>jar</packaging>
 	
 	<name>anthavio-kitchensink</name>
-	
-	<inceptionYear>2013</inceptionYear>
 	<description>Anthavio Kitchen Sink</description>
+	<inceptionYear>2013</inceptionYear>
 
 	<url>http://anthavio.github.com/anthavio-kitchensink</url>
 	
@@ -34,7 +33,6 @@
 	</distributionManagement>
 
 	<developers>
-		
 		<developer>
 			<id>anthavio</id>
 			<name>Martin Vaněk</name>
@@ -43,15 +41,18 @@
 				<role>Java Developer</role>
 			</roles>
 		</developer>
-
 	</developers>
+	
+	<properties>
+		<project.build.java.target>1.8</project.build.java.target>
+	</properties>
 
 	<dependencies>
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.5</version>
+			<version>1.7.7</version>
 		</dependency>
 		
 		<dependency>
@@ -65,21 +66,21 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.0.13</version>
+			<version>1.1.1</version>
 			<scope>test</scope>
 		</dependency>
 				
 		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>6.8.5</version>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
-
+		
 		<dependency>
-			<groupId>org.easytesting</groupId>
-			<artifactId>fest-assert-core</artifactId>
-			<version>2.0M10</version>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>1.6.1</version>
 			<scope>test</scope>
 		</dependency>
 
